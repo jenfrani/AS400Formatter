@@ -1,9 +1,10 @@
 import { SyntheticEvent, useEffect, useState } from "react"
-import TextInput from "./components/TextInput/textinput"
+
 import {
   TableRow,
   TableCell
 } from "@/components/ui/table"
+import TextInput from "./components/TextInput/TextInput";
 
 function App() {
 
@@ -120,8 +121,7 @@ function App() {
     <main className="flex flex-col items-center justify-center min-h-screen w-full my-12">
       <TextInput copyToClipboard={copyToClipboard}
         formatAddress={formatAddress} setAddress={setAddressHandler} formattedAddress={formattedAddress}
-        formatRowOutput={formatRowOutput}>
-      </TextInput>
+        formatRowOutput={formatRowOutput} />
     </main>
   )
 }

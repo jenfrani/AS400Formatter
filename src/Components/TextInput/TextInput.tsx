@@ -1,5 +1,4 @@
 import { SyntheticEvent } from 'react';
-import './textinput.css';
 import { Textarea } from "@/components/ui/textarea"
 import { Button } from "@/components/ui/button"
 import {
