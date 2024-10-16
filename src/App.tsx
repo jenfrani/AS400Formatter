@@ -4,7 +4,8 @@ import {
   TableRow,
   TableCell
 } from "@/components/ui/table"
-import TextInput from "./components/TextInput/TextInput";
+
+import TextInput from "./components/TextInput/TextInput"
 
 function App() {
 
@@ -13,7 +14,7 @@ function App() {
     address: string[]
   }
 
-  const [formattedAddress, setFormattedAddress] = useState<KeyValuePair[]>([]);
+  const [formattedAddress, setFormattedAddress] = useState<KeyValuePair[]>([])
   const [address, setAddress] = useState("")
 
   const formatAddress = (e: SyntheticEvent) => {
@@ -34,7 +35,7 @@ function App() {
       const address = line.split("\t")[1]
 
       // split the address into lines with 34 characters
-      const chunks: string[] = [];
+      const chunks: string[] = []
 
       // split the address into chunks of spaces
       const addressChunks = address.split(" ")
@@ -61,7 +62,7 @@ function App() {
       }
     })
 
-    setFormattedAddress(addressLines);
+    setFormattedAddress(addressLines)
 
 
   }
@@ -74,7 +75,7 @@ function App() {
   useEffect(() => {
     // console.log(address)
     console.log(formattedAddress)
-  }, [address, formattedAddress]);
+  }, [address, formattedAddress])
 
   const formatRowOutput = (address: KeyValuePair, lang: string) => {
     return (

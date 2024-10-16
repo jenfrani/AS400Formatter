@@ -1,4 +1,4 @@
-import { SyntheticEvent } from 'react';
+import { SyntheticEvent } from 'react'
 import { Textarea } from "@/components/ui/textarea"
 import { Button } from "@/components/ui/button"
 import {
@@ -15,10 +15,10 @@ interface KeyValuePair {
     address: string[]
 }
 type Props = {
-    formatAddress: (e: SyntheticEvent) => void;
-    setAddress: (e: SyntheticEvent) => void;
-    formattedAddress: KeyValuePair[];
-    copyToClipboard: (e: SyntheticEvent) => void;
+    formatAddress: (e: SyntheticEvent) => void
+    setAddress: (e: SyntheticEvent) => void
+    formattedAddress: KeyValuePair[]
+    copyToClipboard: (e: SyntheticEvent) => void
     formatRowOutput: (address: KeyValuePair, lang: string) => JSX.Element
 }
 
@@ -64,4 +64,4 @@ const TextInput = ({ formatAddress, formattedAddress, setAddress, copyToClipboar
     )
 }
 
-export default TextInput;
+export default TextInput
