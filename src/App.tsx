@@ -5,7 +5,7 @@ import {
   TableCell
 } from "@/components/ui/table"
 
-import TextInput from "./components/TextInput/TextInput"
+import TextInput from "@/components/TextInput/TextInput"
 
 function App() {
 
