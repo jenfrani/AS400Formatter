@@ -1,10 +1,6 @@
 import { SyntheticEvent, useEffect, useState } from "react"
 import TextInput from "./components/TextInput/textinput"
 import {
-  Table,
-  TableBody,
-  TableHead,
-  TableHeader,
   TableRow,
   TableCell
 } from "@/components/ui/table"
