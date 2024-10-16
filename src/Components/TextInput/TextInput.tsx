@@ -1,4 +1,15 @@
 import { SyntheticEvent } from 'react';
+import './textinput.css';
+import { Textarea } from "@/components/ui/textarea"
+import { Button } from "@/components/ui/button"
+import {
+    Table,
+    TableBody,
+    TableHead,
+    TableHeader,
+    TableRow,
+} from "@/components/ui/table"
+
 
 interface KeyValuePair {
     entryId: string
@@ -9,51 +20,46 @@ type Props = {
     setAddress: (e: SyntheticEvent) => void;
     formattedAddress: KeyValuePair[];
     copyToClipboard: (e: SyntheticEvent) => void;
+    formatRowOutput: (address: KeyValuePair, lang: string) => JSX.Element
 }
 
-const TextInput = ({ formatAddress, formattedAddress, setAddress, copyToClipboard }: Props) => {
+const TextInput = ({ formatAddress, formattedAddress, setAddress, copyToClipboard, formatRowOutput }: Props) => {
     return (
         <>
-            <form onSubmit={formatAddress}>
-                <textarea name="" id="" onChange={setAddress} ></textarea>
+            <form onSubmit={formatAddress} className='flex flex-col gap-4 w-1/2'>
+                <Textarea className="min-w-24 w-full h-96" name="" id="" onChange={setAddress} placeholder='Paste data here'></Textarea>
 
-                <input type="submit" value="Format" />
+                <Button type="submit">Format</Button>
             </form>
-            <form onSubmit={copyToClipboard}>
-                <table style={{ whiteSpace: 'pre' }}>
-                    <thead>
-                        <tr>
-                            <td style={{ width: '30%' }}>ID</td>
-                            <td>Address</td>
-                        </tr>
-                    </thead>
-                    <tbody>
+            <form onSubmit={copyToClipboard} className='mt-8 flex flex-col gap-4 w-1/2'>
+                <Button type="submit" value="Copy to Clipboard">Copy to Clipboard</Button>
+
+                <Table >
+                    <TableHeader>
+                        <TableRow>
+                            <TableHead>ID</TableHead>
+                            <TableHead>Language</TableHead>
+                            <TableHead>Line Number</TableHead>
+                            <TableHead>Description</TableHead>
+                        </TableRow>
+                    </TableHeader>
+                    <TableBody>
 
                         {
                             formattedAddress &&
                             formattedAddress.map((address) => {
                                 return (
                                     <>
-                                        <tr>
-                                            <td>{address.entryId}</td>
-                                            <td>{address.address[0]}</td>
-                                        </tr>
-                                        {address.address.slice(1).map((line) => {
-                                            return (
-                                            <tr>
-                                                <td></td>
-                                                <td>{line.trim()}</td>
-                                            </tr>)
-                                        })}
+                                        {formatRowOutput(address, 'E')}
+                                        {formatRowOutput(address, 'F')}
                                     </>
                                 )
                             })
                         }
-                    </tbody>
+                    </TableBody>
 
-                </table>
+                </Table>
 
-                <input type="submit" value="Copy to Clipboard" />
             </form>
         </>
     )

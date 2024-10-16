@@ -1,0 +1,11 @@
+.border-t {
+    td {
+        border-top: 1px solid #ccc;
+    }
+}
+
+.border-b {
+    td {
+        border-bottom: 1px solid #ccc;
+    }
+}

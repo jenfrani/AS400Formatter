@@ -1,5 +1,14 @@
 import { SyntheticEvent, useEffect, useState } from "react"
-import TextInput from "./Components/TextInput/TextInput"
+import TextInput from "./components/TextInput/textinput"
+import {
+  Table,
+  TableBody,
+  TableHead,
+  TableHeader,
+  TableRow,
+  TableCell
+} from "@/components/ui/table"
+
 function App() {
 
   interface KeyValuePair {
@@ -16,6 +25,11 @@ function App() {
 
     const lines = address.split("\n")
 
+    // remove the last line if it is empty
+    if (lines[lines.length - 1] === "") {
+      lines.pop()
+    }
+
     const addressLines: KeyValuePair[] = lines.map((line) => {
       // first token (separated by a tab) is the entry ID
       const entryId = line.split("\t")[0]
@@ -23,11 +37,26 @@ function App() {
       const address = line.split("\t")[1]
 
       // split the address into lines with 34 characters
-      const chunks = [];
+      const chunks: string[] = [];
 
-      for (let i = 0; i < address.length; i += 34) {
-        chunks.push(address.slice(i, i + 34));
-      }
+      // split the address into chunks of spaces
+      const addressChunks = address.split(" ")
+      // loop through each chunk
+      let stack : string[] = []
+
+      addressChunks.forEach((chunk) => {
+        // add chunks to a temp string until it reaches 34 characters
+
+        if (stack.join(' ').length > 34) {
+          chunks.push(stack.slice(0, stack.length - 1).join(' '))
+          stack = stack.slice(stack.length - 1)
+
+          stack.push(chunk)
+        } else {
+          stack.push(chunk)
+        }
+
+      })
 
       return {
         entryId: entryId,
@@ -50,72 +79,54 @@ function App() {
     console.log(formattedAddress)
   }, [address, formattedAddress]);
 
-  const copyToClipboard = (e: SyntheticEvent, formattedAddress: KeyValuePair[]) => {
-    e.preventDefault()
-    const clipboardAddress = `
-     <table>
-      ${formattedAddress.map((line) => {
-      return `
-          <tr>
-            <td style="background-color: #f2f2f2; color: #333">${line.entryId}</td>
-            <td>${line.address.map((addressLine, index) => {
-        if (index === 0) {
-          return addressLine;
-        } else {
-          return `<br>${addressLine}`;
-        }
-      }).join('')}</td>
-          </tr>
-        `;
-    }).join('')}
-    </table>
-  `;
-    navigator.clipboard.writeText(JSON.stringify(clipboardAddress))
+  const formatRowOutput = (address: KeyValuePair, lang: string) => {
+    return (
+      <>
+        {address.address.map((line, index) => {
+          return (
+            <TableRow className={
+              index === 0 ? 'border-t' : ''
+            }>
+              <TableCell>{address.entryId}</TableCell>
+              <TableCell>{lang}</TableCell>
+              <TableCell>{index < 1 ? '' : index.toString().padStart(2, '0')}</TableCell>
+              <TableCell>{line.trim()}</TableCell>
+            </TableRow>
+          )
+        })}
+      </>
+    )
   }
-  // const copyToClipboard = (e: SyntheticEvent, formattedAddress: KeyValuePair[]) => {
-  //   e.preventDefault()
-  //   const clipboardAddress = `
-  //    <table>
-  //     ${formattedAddress.map((line) => {
-  //     return `
-  //         <tr>
-  //           <td style="background-color: #f2f2f2; color: #333">${line.entryId}</td>
-  //           <td>${line.address.map((addressLine, index) => {
-  //       if (index === 0) {
-  //         return addressLine;
-  //       } else {
-  //         return `<br>${addressLine}`;
-  //       }
-  //     }).join('')}</td>
-  //         </tr>
-  //       `;
-  //   }).join('')}
-  //   </table>
-  // `;
-  // const tableDoc = document.createElement('table');
 
-  // tableDoc.innerHTML = clipboardAddress;
-  //   const doc = document.implementation.createHTMLDocument('');
-  //   doc.body.appendChild(tableDoc.cloneNode(true));
+  const copyToClipboard = (e: SyntheticEvent) => {
+    e.preventDefault()
+    // copy the contents of the table to the clipboard
+    // get the table element
+    const table = document.querySelector('table')
+    let clipboardString = ''
 
-  //   // Create a Blob with the HTML content
-  //   const blob = new Blob([doc.documentElement.outerHTML], { type: 'text/html' });
-
-  //   // Create a new ClipboardItem with the Blob
-  //   const clipboardItem = new ClipboardItem({ 'text/html': blob });
-
-  //   navigator.clipboard.write([clipboardItem]).then(() => {
-  //     console.log('Table copied with styling');
-  //   }).catch(err => {
-  //     console.error('Failed to copy table: ', err);
-  //   });
-  //   // navigator.clipboard.writeText(JSON.stringify(clipboardAddress))
-  // }
+    if (table) {
+      // loop through each row in the table
+      const rows = table.querySelectorAll('tr')
+      rows.forEach((row) => {
+        // loop through each cell in the row
+        const cells = row.querySelectorAll('td')
+        cells.forEach((cell) => {
+          clipboardString += "'" + cell.textContent + '\t'
+        })
+        clipboardString += '\n'
+      })
+    }
+    navigator.clipboard.writeText(clipboardString)
+  }
 
   return (
-    <>
-      <TextInput copyToClipboard={(e) => copyToClipboard(e, formattedAddress)} formatAddress={formatAddress} setAddress={setAddressHandler} formattedAddress={formattedAddress}></TextInput>
-    </>
+    <main className="flex flex-col items-center justify-center min-h-screen w-full my-12">
+      <TextInput copyToClipboard={copyToClipboard}
+        formatAddress={formatAddress} setAddress={setAddressHandler} formattedAddress={formattedAddress}
+        formatRowOutput={formatRowOutput}>
+      </TextInput>
+    </main>
   )
 }
 
