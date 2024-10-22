@@ -29,6 +29,8 @@ function App() {
     }
 
     const addressLines: KeyValuePair[] = lines.map((line) => {
+      // serialize the line
+
       // first token (separated by a tab) is the entry ID
       const entryId = line.split("\t")[0]
       // second token (the rest of the line) is the actual address
@@ -40,21 +42,27 @@ function App() {
       // split the address into chunks of spaces
       const addressChunks = address.split(" ")
       // loop through each chunk
-      let stack : string[] = []
+      let stack: string[] = []
 
-      addressChunks.forEach((chunk) => {
-        // add chunks to a temp string until it reaches 34 characters
+
+      let index = 0
+      do {
 
         if (stack.join(' ').length > 34) {
           chunks.push(stack.slice(0, stack.length - 1).join(' '))
           stack = stack.slice(stack.length - 1)
-
-          stack.push(chunk)
+          if (index === addressChunks.length - 1) {
+            chunks.push(addressChunks[index])
+          } else {
+            stack.push(addressChunks[index])
+          }
         } else {
-          stack.push(chunk)
+          stack.push(addressChunks[index])
         }
 
-      })
+
+        index++
+      } while (chunks.join(' ').length <= address.length);
 
       return {
         entryId: entryId,
@@ -110,7 +118,7 @@ function App() {
         // loop through each cell in the row
         const cells = row.querySelectorAll('td')
         cells.forEach((cell) => {
-          clipboardString += "'" + cell.textContent + '\t'
+          clipboardString += cell.textContent + '\t'
         })
         clipboardString += '\n'
       })
