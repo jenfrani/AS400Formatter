@@ -17,6 +17,29 @@ function App() {
   const [formattedAddress, setFormattedAddress] = useState<KeyValuePair[]>([])
   const [address, setAddress] = useState("")
 
+  const tokenizeText = (text: string, maxLineLength: number = 34): string[] => {
+    const words = text.split(/\s+/);
+    const lines: string[] = [];
+    let currentLine = '';
+
+    for (const word of words) {
+      if (currentLine.length + word.length + 1 <= maxLineLength) {
+        currentLine += (currentLine ? ' ' : '') + word;
+      } else {
+        if (currentLine) {
+          lines.push(currentLine);
+        }
+        currentLine = word;
+      }
+    }
+
+    if (currentLine) {
+      lines.push(currentLine);
+    }
+
+    return lines;
+  }
+
   const formatAddress = (e: SyntheticEvent) => {
     e.preventDefault()
     // we want to loop through each line of the textarea value
@@ -37,32 +60,9 @@ function App() {
       const address = line.split("\t")[1]
 
       // split the address into lines with 34 characters
-      const chunks: string[] = []
+      let chunks: string[] = []
 
-      // split the address into chunks of spaces
-      const addressChunks = address.split(" ")
-      // loop through each chunk
-      let stack: string[] = []
-
-
-      let index = 0
-      do {
-
-        if (stack.join(' ').length > 34) {
-          chunks.push(stack.slice(0, stack.length - 1).join(' '))
-          stack = stack.slice(stack.length - 1)
-          if (index === addressChunks.length - 1) {
-            chunks.push(addressChunks[index])
-          } else {
-            stack.push(addressChunks[index])
-          }
-        } else {
-          stack.push(addressChunks[index])
-        }
-
-
-        index++
-      } while (chunks.join(' ').length <= address.length);
+      chunks = tokenizeText(address, 34)
 
       return {
         entryId: entryId,
@@ -71,7 +71,6 @@ function App() {
     })
 
     setFormattedAddress(addressLines)
-
 
   }
 

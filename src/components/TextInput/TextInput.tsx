@@ -27,12 +27,10 @@ const TextInput = ({ formatAddress, formattedAddress, setAddress, copyToClipboar
         <>
             <form onSubmit={formatAddress} className='flex flex-col gap-4 w-1/2'>
                 <Textarea className="min-w-24 w-full h-96" name="" id="" onChange={setAddress} placeholder='Paste data here'></Textarea>
-
                 <Button type="submit">Format</Button>
             </form>
             <form onSubmit={copyToClipboard} className='mt-8 flex flex-col gap-4 w-1/2'>
                 <Button type="submit" value="Copy to Clipboard">Copy to Clipboard</Button>
-
                 <Table >
                     <TableHeader>
                         <TableRow>
@@ -58,7 +56,6 @@ const TextInput = ({ formatAddress, formattedAddress, setAddress, copyToClipboar
                     </TableBody>
 
                 </Table>
-
             </form>
         </>
     )
