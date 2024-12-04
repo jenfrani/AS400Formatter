@@ -1,4 +1,4 @@
-import { SyntheticEvent, useEffect, useState } from "react"
+import { SyntheticEvent, useState } from "react"
 
 import {
   TableRow,
@@ -16,6 +16,8 @@ function App() {
 
   const [formattedAddress, setFormattedAddress] = useState<KeyValuePair[]>([])
   const [address, setAddress] = useState("")
+  const [charLength, setCharLength] = useState(34)
+
 
   const tokenizeText = (text: string, maxLineLength: number = 34): string[] => {
     const words = text.split(/\s+/);
@@ -62,7 +64,7 @@ function App() {
       // split the address into lines with 34 characters
       let chunks: string[] = []
 
-      chunks = tokenizeText(address, 34)
+      chunks = tokenizeText(address, charLength)
 
       return {
         entryId: entryId,
@@ -79,17 +81,12 @@ function App() {
     setAddress(e.target.value)
   }
 
-  useEffect(() => {
-    // console.log(address)
-    console.log(formattedAddress)
-  }, [address, formattedAddress])
-
   const formatRowOutput = (address: KeyValuePair, lang: string) => {
     return (
       <>
         {address.address.map((line, index) => {
           return (
-            <TableRow className={
+            <TableRow key={index} className={
               index === 0 ? 'border-t' : ''
             }>
               <TableCell>{address.entryId}</TableCell>
@@ -125,11 +122,15 @@ function App() {
     navigator.clipboard.writeText(clipboardString)
   }
 
+  const changeCharLength = (e: SyntheticEvent) => {
+    setCharLength(parseInt(e.target.value)) 
+  }
+
   return (
     <main className="flex flex-col items-center justify-center min-h-screen w-full my-12">
       <TextInput copyToClipboard={copyToClipboard}
         formatAddress={formatAddress} setAddress={setAddressHandler} formattedAddress={formattedAddress}
-        formatRowOutput={formatRowOutput} />
+        formatRowOutput={formatRowOutput} changeCharLength={changeCharLength} charLength={charLength}/>
     </main>
   )
 }

@@ -1,4 +1,4 @@
-import { SyntheticEvent } from 'react'
+import React, { SyntheticEvent } from 'react'
 import { Textarea } from "@/components/ui/textarea"
 import { Button } from "@/components/ui/button"
 import {
@@ -8,6 +8,7 @@ import {
     TableHeader,
     TableRow,
 } from "@/components/ui/table"
+import { Input } from "@/components/ui/input"
 
 
 interface KeyValuePair {
@@ -20,13 +21,16 @@ type Props = {
     formattedAddress: KeyValuePair[]
     copyToClipboard: (e: SyntheticEvent) => void
     formatRowOutput: (address: KeyValuePair, lang: string) => JSX.Element
+    changeCharLength: (e: SyntheticEvent) => void
+    charLength: number
 }
 
-const TextInput = ({ formatAddress, formattedAddress, setAddress, copyToClipboard, formatRowOutput }: Props) => {
+const TextInput = ({ formatAddress, formattedAddress, charLength, setAddress, copyToClipboard, formatRowOutput, changeCharLength }: Props) => {
     return (
         <>
             <form onSubmit={formatAddress} className='flex flex-col gap-4 w-1/2'>
                 <Textarea className="min-w-24 w-full h-96" name="" id="" onChange={setAddress} placeholder='Paste data here'></Textarea>
+                <Input type="text" placeholder='34' onChange={changeCharLength} value={charLength} />
                 <Button type="submit">Format</Button>
             </form>
             <form onSubmit={copyToClipboard} className='mt-8 flex flex-col gap-4 w-1/2'>
@@ -46,10 +50,10 @@ const TextInput = ({ formatAddress, formattedAddress, setAddress, copyToClipboar
                             formattedAddress &&
                             formattedAddress.map((address) => {
                                 return (
-                                    <>
+                                    <React.Fragment key={address.entryId}>
                                         {formatRowOutput(address, 'E')}
                                         {formatRowOutput(address, 'F')}
-                                    </>
+                                    </React.Fragment>
                                 )
                             })
                         }
