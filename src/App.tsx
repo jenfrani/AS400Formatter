@@ -122,7 +122,7 @@ function App() {
     navigator.clipboard.writeText(clipboardString)
   }
 
-  const changeCharLength = (e: SyntheticEvent) => {
+  const changeCharLength = (e: React.ChangeEvent<HTMLInputElement>) => {
     setCharLength(parseInt(e.target.value)) 
   }
 

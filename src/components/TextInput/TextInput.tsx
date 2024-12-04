@@ -21,7 +21,7 @@ type Props = {
     formattedAddress: KeyValuePair[]
     copyToClipboard: (e: SyntheticEvent) => void
     formatRowOutput: (address: KeyValuePair, lang: string) => JSX.Element
-    changeCharLength: (e: SyntheticEvent) => void
+    changeCharLength: (e: React.ChangeEvent<HTMLInputElement>) => void
     charLength: number
 }
 
